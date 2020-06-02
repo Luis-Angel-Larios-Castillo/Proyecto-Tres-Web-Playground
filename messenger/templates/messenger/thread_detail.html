@@ -70,21 +70,18 @@
                     send.disabled = true;
                      const url = "{% url 'messenger:add' thread.pk %}" + "?content="+content;
                   fetch(url, {'credentials':'include'}).then(response => response.json()).then(function(data){
-                    
-                    // Si el mensaje se ha creado correctamente...
-                    if (data.created) {
-                      // Si es el primer mensaje del hilo actualizaremos para que aparezca a la izquierda
-                      if (data.first) {
-                        window.location.href = "{% url 'messenger:detail' thread.pk %}";
-                      }
-                    // Si no hay redirección creamos una nueva capa dinámicamente con el mensaje
                       var message = document.createElement('div');
                       message.classList.add('mine', 'mb-3');
                       message.innerHTML = '<small><i>Hace unos segundos</i></small><br>'+decodeURIComponent(content);
                       document.getElementById("thread").appendChild(message);   // Lo añadimos a la div thread
                       ScrollBottomInThread();  // Movemos el scrol abajo del todo
 
-                    }
+                      if (data.first){
+                          window.location.href = "{% url 'messenger:detail' thread.pk %}";
+                      }
+
+
+                    
                   })
                   }
                 })
